@@ -20,7 +20,7 @@ Actualmente, el proyecto se encuentra en la fase de **Análisis y Diseño**. Pue
 
 ---
 
-## ✨ Características Principales
+## ☝️ Características Principales
 * **Gestión de Préstamos:** Control de fechas y disponibilidad en tiempo real.
 * **Perfiles Diferenciados:** Acceso para bibliotecarios, administrativos, docentes y alumnos.
 * **Reportes Estadísticos:** Generación de métricas sobre los libros más solicitados.
