@@ -15,8 +15,8 @@ Para el desarrollo de este sistema se han seleccionado las siguientes herramient
 
 Actualmente, el proyecto se encuentra en la fase de **Análisis y Diseño**. Puedes encontrar la documentación detallada en las siguientes carpetas:
 
-* [Análisis de Requerimientos](./docs/analisis/)
-* [Diseño de Base de Datos y Diagramas](./docs/diseno/)
+* [Análisis de requerimientos](./docs/analisis/)
+* [Ver diseño y diagramas](./docs/diseno/)
 
 ---
 
