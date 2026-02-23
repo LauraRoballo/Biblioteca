@@ -21,7 +21,7 @@ El proyecto se encuentra actualmente en la **fase de análisis y diseño**.
 La documentación se organiza en las siguientes secciones:
 
 * [Análisis de requerimientos](./docs/analisis/)
-* [Ver diseño y diagramas](./docs/diseno/)
+* [Ver diseño y diagramas](./docs/diseno/diseño.md)
 
 
 
