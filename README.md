@@ -9,8 +9,8 @@ El sistema está orientado a la gestión interna de la biblioteca, incluyendo el
 
 Las siguientes tecnologías se plantean como base para una futura implementación del sistema:
 
-* **Lenguaje de Programación:** Java
-* **Framework de Backend:** Spring Boot
+* **Lenguaje de Programación:** Python
+* **Framework de Backend:** FastAPI 
 * **Base de Datos:** MySQL
 * **Frontend:** HTML5, CSS3 y JavaScript
 
