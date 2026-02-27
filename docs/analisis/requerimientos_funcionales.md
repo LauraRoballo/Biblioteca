@@ -36,7 +36,9 @@ El sistema debe permitir al administrador y al bibliotecario generar reportes y 
 El sistema debe enviar notificaciones automáticas a los usuarios cuando se acerque la fecha de vencimiento de un préstamo o cuando un libro reservado esté disponible.
 
 ## RF-011: Políticas por rol
-El sistema debe permitir al administrador definir y gestionar políticas de préstamo asociadas a los distintos roles de usuario (alumnos y docentes), tales como límites de cantidad de libros y tiempos máximos de préstamo.
+El sistema debe aplicar automáticamente las políticas de préstamo, tiempos de devolución y sanciones definidas para cada rol de usuario (alumno o docente) durante los procesos de préstamo, reserva y devolución de libros.
+
+Las condiciones específicas de estas políticas se encuentran definidas en las reglas de negocio del sistema.
 
 ## RF-012: Difusión literaria
 El sistema debe contar con una sección pública para la publicación de noticias del colegio, recomendaciones de lectura y autores destacados del mes.
