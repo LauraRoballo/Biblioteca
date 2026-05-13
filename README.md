@@ -10,8 +10,8 @@ El sistema está orientado a la gestión interna de la biblioteca, incluyendo el
 Las siguientes tecnologías se plantean como base para una futura implementación del sistema:
 
 * **Lenguaje de Programación:** C#
-* **Backend: ASP.NET Core
-* **ORM: Entity Framework Core
+* **Backend:** ASP.NET Core
+* **ORM:** Entity Framework Core
 * **Base de Datos:** SQL Server
 * **Frontend:** Blazor 
 
