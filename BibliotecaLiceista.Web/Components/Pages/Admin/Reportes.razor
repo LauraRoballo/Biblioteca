@@ -1,0 +1,62 @@
+@page "/admin/reportes"
+@layout AdminLayout
+
+<PageTitle>Reportes y Estadísticas · Administrador</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-bar-chart-line"></i> Reportes y Estadísticas</h2>
+    <button type="button" class="btn botonPrincipal"><i class="bi bi-download"></i> Exportar Reporte</button>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-graph-up"></i></div>
+        <div>
+            <p class="stat-numero">312</p>
+            <p class="stat-label">Préstamos este mes</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-people"></i></div>
+        <div>
+            <p class="stat-numero">198</p>
+            <p class="stat-label">Usuarios activos</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-exclamation-triangle"></i></div>
+        <div>
+            <p class="stat-numero">9</p>
+            <p class="stat-label">Libros vencidos</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-journal-bookmark"></i></div>
+        <div>
+            <p class="stat-numero">1.248</p>
+            <p class="stat-label">Libros en catálogo</p>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card">
+    <h5>Libros más prestados</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Categoría</th>
+                    <th>Veces prestado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Cien años de soledad</td><td>Literatura</td><td>46</td></tr>
+                <tr><td>El principito</td><td>Infantil</td><td>39</td></tr>
+                <tr><td>Cálculo diferencial</td><td>Matemáticas</td><td>31</td></tr>
+                <tr><td>Física para bachillerato</td><td>Ciencias</td><td>27</td></tr>
+                <tr><td>Historia de Colombia</td><td>Historia</td><td>18</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>

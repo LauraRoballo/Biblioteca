@@ -1,0 +1,42 @@
+@inherits LayoutComponentBase
+
+@* Layout del panel de Bibliotecario: Dashboard, Consultar Libros, Préstamos,
+   Devoluciones, Gestionar Reservas, Consultar Usuarios, Notificaciones, Perfil. *@
+
+<NavbarBiblioteca />
+
+<div class="panel-layout rol-bibliotecario">
+    <aside class="panel-sidebar">
+        <div class="panel-sidebar-header">
+            <i class="bi bi-person-badge rol-icono"></i>
+            <div>
+                <h5>Bibliotecario</h5>
+                <small>Panel de gestión</small>
+            </div>
+        </div>
+        <ul class="panel-sidebar-nav">
+            <li><NavLink href="bibliotecario/dashboard" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-speedometer2"></i> Dashboard</NavLink></li>
+            <li><NavLink href="bibliotecario/consultar-libros" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-journal-bookmark"></i> Consultar Libros</NavLink></li>
+            <li><NavLink href="bibliotecario/prestamos" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-arrow-left-right"></i> Préstamos</NavLink></li>
+            <li><NavLink href="bibliotecario/devoluciones" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-arrow-return-left"></i> Devoluciones</NavLink></li>
+            <li><NavLink href="bibliotecario/reservas" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-calendar-check"></i> Gestionar Reservas</NavLink></li>
+            <li><NavLink href="bibliotecario/usuarios" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-people"></i> Consultar Usuarios</NavLink></li>
+            <li><NavLink href="bibliotecario/notificaciones" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-bell"></i> Notificaciones</NavLink></li>
+            <li><NavLink href="bibliotecario/perfil" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-person-circle"></i> Perfil</NavLink></li>
+        </ul>
+    </aside>
+
+    <div class="panel-content">
+        <div class="panel-topbar">
+            <span class="rol-pill"><i class="bi bi-person-badge"></i> Bibliotecario</span>
+            <div class="panel-topbar-acciones">
+                <a href="panel"><i class="bi bi-arrow-left-right"></i> Cambiar de rol</a>
+                <a href="login"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+            </div>
+        </div>
+
+        @Body
+    </div>
+</div>
+
+<FooterBiblioteca />

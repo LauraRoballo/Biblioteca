@@ -1,0 +1,289 @@
+
+/*==================================================
+                LOGIN
+==================================================*/
+
+.form-control{
+
+    border-radius:12px;
+    height:45px;
+    width:100%;
+    margin-bottom: 30px;
+
+}
+
+.form-control:focus,
+.form-select:focus{
+
+    border-color: var(--color-botones);
+    box-shadow: 0 0 0 0.2rem rgba(199, 160, 74, .25);
+
+}
+.card-title {
+    text-align: center;
+}
+
+.cardLogin{
+
+    border:none;
+    border-radius:15px;
+
+}
+
+/*==================================================
+                REGISTRO
+==================================================*/
+
+.cardRegistro{
+
+    border:none;
+    border-radius:15px;
+
+}
+
+.iconoPagina{
+    width: 90px;
+    height: 90px;
+    display: block;
+    margin: 0 auto 20px;
+    object-fit: contain;
+}
+/*==================================================
+                RECUPERAR CONTRASEÑA
+==================================================*/
+
+.iconoAuth{
+
+    width:130px;
+
+    margin:auto;
+
+    display:block;
+
+}
+
+.textoAuth{
+
+    font-size:15px;
+
+    color:#555;
+
+    text-align:center;
+
+    line-height:1.6;
+
+}
+
+.cardAuth{
+
+    border:none;
+    border-radius:15px;
+    max-width:900px;
+    margin:0 auto;
+
+}
+
+.cardAuth .card-body{
+
+    padding:40px;
+
+}
+
+/*==================================================
+            VALIDAR CÓDIGO
+==================================================*/
+
+.codigoOTP{
+
+    width:55px;
+
+    height:60px;
+
+    text-align:center;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    border-radius:12px;
+
+}
+
+.codigoOTP:focus{
+
+    border-color: var(--color-botones);
+    box-shadow: 0 0 0 0.15rem rgba(199, 160, 74, .25);
+    outline:none;
+
+}
+
+.texto{
+
+    font-size:14px;
+    color:#555;
+    margin-top:20px;
+    margin-bottom:5px;
+
+}
+
+.reenviar{
+
+    display:inline-block;
+    color: var(--color-primario);
+    font-weight:600;
+    text-decoration:none;
+
+}
+
+.reenviar:hover{
+
+    color: var(--color-botones);
+    text-decoration:underline;
+
+}
+/*==================================================
+            BOTONES
+==================================================*/
+.botonPrincipal{
+    background-color: var(--color-botones);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    width: 220px;
+    height: 45px;
+    transition: all 0.3s ease;
+}
+
+.botonPrincipal:hover{
+    background-color: #d8b25a;
+    color: white;
+}
+
+.botonPrincipal:focus,
+.botonPrincipal:active{
+    background-color: #d8b25a !important;
+    color: white !important;
+    border: none;
+    box-shadow: none;
+}
+
+/* Variante compacta para usarse dentro de tablas (paneles por rol) */
+.botonPrincipal.btn-sm{
+    width:auto;
+    height:auto;
+}
+/*==================================================
+            ENLACES
+==================================================*/
+
+.linkBiblioteca{
+
+    display:block;
+    text-align:center;
+    margin-top:25px;
+    color: var(--color-primario);
+    text-decoration:none;
+    font-weight:500;
+
+}
+
+.linkBiblioteca:hover{
+
+    color: var(--color-botones);
+    text-decoration:underline;
+
+}
+
+/*==================================================
+            ALERTAS
+==================================================*/
+
+.alertaBiblioteca{
+
+    position:fixed;
+
+    top:30px;
+
+    right:30px;
+
+    width:380px;
+
+    background: var(--color-error);
+
+    color:white;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.30);
+
+}
+
+/*=====================================
+    CONTRASEÑA RESTABLECIDA
+======================================*/
+
+.iconoAuth{
+
+    width:170px;
+
+    display:block;
+
+    margin:0 auto 35px;
+
+}
+
+.alertaExito{
+
+    max-width:900px;
+
+    margin:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:25px;
+
+    background:#d4edda;
+
+    border-left:6px solid #28a745;
+
+    border-radius:15px;
+
+    padding:25px;
+
+}
+
+.alertaExito .alertaIcono img{
+
+    width:55px;
+
+}
+
+.alertaExito h4{
+
+    color:#155724;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+}
+
+.alertaExito p{
+
+    margin:0;
+
+    color:#155724;
+
+}

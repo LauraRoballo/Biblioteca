@@ -1,0 +1,44 @@
+@page "/bibliotecario/prestamos"
+@layout BibliotecarioLayout
+
+<PageTitle>Préstamos · Bibliotecario</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-arrow-left-right"></i> Préstamos</h2>
+    <button type="button" class="btn botonPrincipal"><i class="bi bi-plus-lg"></i> Registrar Préstamo</button>
+</div>
+
+<div class="panel-card">
+    <h5>Préstamos activos</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Fecha de préstamo</th>
+                    <th>Fecha límite</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Laura Gómez</td><td>El principito</td><td>19/08/2026</td><td>27/08/2026</td>
+                    <td><span class="badge bg-success">Activo</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-secondary" title="Renovar"><i class="bi bi-arrow-repeat"></i></button></td>
+                </tr>
+                <tr>
+                    <td>Carlos Ruiz</td><td>Cálculo diferencial</td><td>10/08/2026</td><td>18/08/2026</td>
+                    <td><span class="badge bg-danger">Vencido</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-secondary" title="Renovar"><i class="bi bi-arrow-repeat"></i></button></td>
+                </tr>
+                <tr>
+                    <td>Ana Ramírez</td><td>Cien años de soledad</td><td>22/08/2026</td><td>30/08/2026</td>
+                    <td><span class="badge bg-success">Activo</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-secondary" title="Renovar"><i class="bi bi-arrow-repeat"></i></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+@page "/admin/configuracion"
+@layout AdminLayout
+
+<PageTitle>Configuración · Administrador</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-gear"></i> Configuración</h2>
+</div>
+
+<div class="panel-card">
+    <h5>Parámetros del sistema</h5>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Nombre de la biblioteca</label>
+            <input type="text" class="form-control" value="Biblioteca Liceísta" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Horario de atención</label>
+            <input type="text" class="form-control" value="Lunes a viernes, 7:00 a. m. - 4:00 p. m." />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Días máximos de préstamo</label>
+            <input type="number" class="form-control" value="8" min="1" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Libros máximos por usuario</label>
+            <input type="number" class="form-control" value="3" min="1" />
+        </div>
+        <div class="col-12">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="permitirRenovaciones" checked />
+                <label class="form-check-label" for="permitirRenovaciones">
+                    Permitir una renovación por préstamo si el libro no está reservado
+                </label>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn botonPrincipal mt-3">Guardar cambios</button>
+</div>
+
+<div class="panel-card">
+    <h5>Copias de seguridad</h5>
+    <p class="textoAuth mb-3" style="text-align:left;">
+        Última copia de seguridad: 24/08/2026, 11:30 p. m.
+    </p>
+    <button type="button" class="btn btn-outline-secondary"><i class="bi bi-cloud-arrow-up"></i> Generar copia de seguridad ahora</button>
+</div>

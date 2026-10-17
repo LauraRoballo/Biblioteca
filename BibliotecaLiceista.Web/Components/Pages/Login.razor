@@ -1,0 +1,62 @@
+@page "/"
+@page "/login"
+
+<PageTitle>Login</PageTitle>
+
+<div class="login-page">
+
+    <!-- Inicio de sesión -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card cardLogin shadow">
+                    <div class="card-body">
+                        <h2 class="card-title">Iniciar sesión</h2>
+                        <form class="login" action="panel">
+                            <label for="correoInstitucional">Correo institucional:</label>
+                            <input class="form-control" type="email" id="correoInstitucional" name="correoInstitucional" placeholder="Ingrese su correo institucional" required />
+
+                            <label for="contrasenia">Contraseña:</label>
+                            <input class="form-control" type="password" id="contrasenia" name="contrasenia" placeholder="Ingrese su contraseña" required />
+
+                            <div class="text-center">
+                                <button class="btn botonPrincipal" type="submit">
+                                    Iniciar sesión
+                                </button>
+                            </div>
+                        </form>
+                        <a href="recuperar-contrasenia" class="linkBiblioteca">
+                            ¿Olvidó su contraseña?
+                        </a>
+                        <a href="registro" class="linkBiblioteca">
+                            ¿No tiene cuenta? Regístrese
+                        </a>
+                        <a href="informacion-biblioteca" class="linkBiblioteca">
+                            Información de la biblioteca
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Alerta (se activará cuando exista backend que determine cuándo mostrarla) -->
+<div class="alertaBiblioteca d-none" id="alertaError">
+
+    <div class="alertaIcono">
+        <img src="img/exclamacion.png" alt="Error" />
+    </div>
+
+    <div class="alertaMensaje">
+        <h5>Credenciales incorrectas</h5>
+        <p>
+            El correo institucional o la contraseña son incorrectos.
+            Inténtelo nuevamente.
+        </p>
+    </div>
+
+    <button class="btn-close" onclick="cerrarAlerta()"></button>
+
+</div>

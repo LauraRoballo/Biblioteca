@@ -1,0 +1,53 @@
+@page "/cambiar-contrasenia"
+
+<PageTitle>Cambiar contraseña</PageTitle>
+
+
+<div class="container my-5">
+    <div class="card shadow cardAuth">
+        <div class="card-body">
+            <div class="row align-items-center">
+
+                <!-- Columna izquierda -->
+                <div class="col-lg-4 text-center">
+                    <img src="img/candado-modificar.png" class="iconoAuth" alt="Modificar" />
+                    <p class="textoAuth mt-3">
+                        La contraseña debe contener:
+                        Mínimo 8 caracteres
+                        Al menos una letra mayúscula
+                        Al menos una letra minúscula
+                        Al menos un número
+                        Al menos un carácter especial (!@@#$%&amp;)
+                    </p>
+                </div>
+
+                <div class="col-lg-8">
+                    <h2 class="mb-4">Cambiar contraseña</h2>
+
+                    <form action="contrasena-restablecida">
+                        <label for="nuevaContrasenia" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="nuevaContrasenia" name="nuevaContrasenia"
+                               placeholder="Ingrese su contraseña" required minlength="8"
+                               pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}"
+                               title="Mínimo 8 caracteres, con mayúscula, minúscula, número y carácter especial" />
+
+                        <label for="confirmarContrasenia" class="form-label">Confirmar contraseña</label>
+                        <input type="password" class="form-control" id="confirmarContrasenia" name="confirmarContrasenia"
+                               placeholder="Confirme su contraseña" required minlength="8" />
+
+                        <div class="text-center mt-4">
+                            <button class="btn botonPrincipal" type="submit">
+                                Confirmar
+                            </button>
+                        </div>
+                    </form>
+
+                    <a href="login" class="linkBiblioteca">
+                        Volver a iniciar sesión
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

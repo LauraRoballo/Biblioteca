@@ -1,0 +1,50 @@
+@page "/codigo-recuperacion"
+
+<PageTitle>Validar código</PageTitle>
+
+<div class="container my-5">
+    <div class="card shadow cardAuth">
+        <div class="card-body">
+            <div class="row align-items-center">
+
+                <!-- Columna izquierda -->
+                <div class="col-lg-4 text-center">
+                    <img src="img/candado-validar.png" class="iconoAuth" alt="Validar" />
+                    <p class="textoAuth mt-3">
+                        Ingrese el código de verificación
+                    </p>
+                </div>
+
+                <div class="col-lg-8">
+                    <h2 class="mb-4">Validar código</h2>
+
+                    <form action="cambiar-contrasenia">
+                        <!-- Ingreso de código -->
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <input class="form-control codigoOTP" name="codigo1" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+                            <input class="form-control codigoOTP" name="codigo2" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+                            <input class="form-control codigoOTP" name="codigo3" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+                            <input class="form-control codigoOTP" name="codigo4" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+                            <input class="form-control codigoOTP" name="codigo5" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+                            <input class="form-control codigoOTP" name="codigo6" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+                        </div>
+
+                        <p class="texto">¿No recibiste el código?</p>
+                        <a href="recuperar-contrasenia" class="reenviar">Reenviar código</a>
+
+                        <div class="text-center mt-4">
+                            <button class="btn botonPrincipal" type="submit">
+                                Verificar
+                            </button>
+                        </div>
+                    </form>
+
+                    <a href="login" class="linkBiblioteca">
+                        Volver a iniciar sesión
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

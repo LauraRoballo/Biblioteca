@@ -1,0 +1,19 @@
+/*==================================
+        LOGIN
+===================================*/
+
+.login-page .form-control{
+    margin-top: 10px;
+}
+
+.login-page h2{
+    margin-bottom: 20px;
+    display: block;
+
+}
+
+.login-page .linkBiblioteca{
+    display: block;
+    text-align: center;
+    margin-top: 50px;
+}

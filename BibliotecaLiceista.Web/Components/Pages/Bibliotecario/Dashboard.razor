@@ -1,0 +1,61 @@
+@page "/bibliotecario/dashboard"
+@layout BibliotecarioLayout
+
+<PageTitle>Dashboard · Bibliotecario</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-arrow-left-right"></i></div>
+        <div>
+            <p class="stat-numero">87</p>
+            <p class="stat-label">Préstamos activos</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-arrow-return-left"></i></div>
+        <div>
+            <p class="stat-numero">12</p>
+            <p class="stat-label">Devoluciones de hoy</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-calendar-check"></i></div>
+        <div>
+            <p class="stat-numero">14</p>
+            <p class="stat-label">Reservas pendientes</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-people"></i></div>
+        <div>
+            <p class="stat-numero">23</p>
+            <p class="stat-label">Usuarios atendidos hoy</p>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card">
+    <h5>Movimientos recientes</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Movimiento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>10:15 a. m.</td><td>Laura Gómez</td><td>El principito</td><td>Préstamo</td></tr>
+                <tr><td>9:50 a. m.</td><td>Juan Pérez</td><td>Historia de Colombia</td><td>Devolución</td></tr>
+                <tr><td>9:20 a. m.</td><td>Carlos Ruiz</td><td>Cálculo diferencial</td><td>Renovación</td></tr>
+                <tr><td>8:45 a. m.</td><td>Ana Ramírez</td><td>Cien años de soledad</td><td>Reserva aprobada</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>

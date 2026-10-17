@@ -1,0 +1,93 @@
+@page "/registro"
+
+<PageTitle>Crear usuario</PageTitle>
+
+<div class="login-page">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <form class="formRegistro" action="login">
+                    <div class="card cardRegistro shadow">
+                        <div class="card-body">
+
+                            <img src="img/usuario.png" class="iconoPagina" alt="Usuario" />
+
+                            <h2 class="text-center mb-4">Crear cuenta</h2>
+
+                            <div class="row g-3">
+
+                                <!-- Nombre -->
+                                <div class="col-md-6">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese su nombre" required />
+                                </div>
+
+                                <!-- Apellido -->
+                                <div class="col-md-6">
+                                    <label for="apellido" class="form-label">Apellido</label>
+                                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingrese su apellido" required />
+                                </div>
+
+                                <!-- Documento -->
+                                <div class="col-md-6">
+                                    <label for="documento" class="form-label">Documento</label>
+                                    <input type="text" class="form-control" id="documento" name="documento" placeholder="Ingrese su documento" required />
+                                </div>
+
+                                <!-- Teléfono -->
+                                <div class="col-md-6">
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingrese su teléfono" required />
+                                </div>
+
+                                <!-- Fecha -->
+                                <div class="col-md-6">
+                                    <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required />
+                                </div>
+
+                                <!-- Tipo -->
+                                <div class="col-md-6">
+                                    <label for="tipoUsuario" class="form-label">Tipo de usuario</label>
+                                    <select class="form-select" id="tipoUsuario" name="tipoUsuario" required>
+                                        <option value="">Seleccione...</option>
+                                        <option value="alumno">Alumno</option>
+                                        <option value="docente">Docente</option>
+                                        <option value="bibliotecario">Bibliotecario</option>
+                                        <option value="administrador">Administrador</option>
+                                    </select>
+                                </div>
+
+                                <!-- Correo -->
+                                <div class="col-md-6">
+                                    <label for="correoInstitucional" class="form-label">Correo institucional</label>
+                                    <input type="email" class="form-control" id="correoInstitucional" name="correoInstitucional" placeholder="Ingrese el correo institucional" required />
+                                </div>
+
+                                <!-- Contraseña -->
+                                <div class="col-md-6">
+                                    <label for="contrasenia" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="contrasenia" name="contrasenia" placeholder="Ingrese una contraseña" required />
+                                </div>
+
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button class="btn botonPrincipal" type="submit">
+                                    Registrarse
+                                </button>
+                            </div>
+
+                            <a href="login" class="linkBiblioteca">
+                                ¿Ya tiene cuenta? Inicie sesión
+                            </a>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

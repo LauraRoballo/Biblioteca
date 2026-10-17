@@ -1,0 +1,48 @@
+@page "/bibliotecario/reservas"
+@layout BibliotecarioLayout
+
+<PageTitle>Gestionar Reservas · Bibliotecario</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-calendar-check"></i> Gestionar Reservas</h2>
+</div>
+
+<div class="panel-card">
+    <h5>Reservas</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Fecha de reserva</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ana Ramírez</td><td>El principito</td><td>24/08/2026</td>
+                    <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-success" title="Aprobar"><i class="bi bi-check-lg"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" title="Rechazar"><i class="bi bi-x-lg"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Carlos Ruiz</td><td>Cálculo diferencial</td><td>26/08/2026</td>
+                    <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-success" title="Aprobar"><i class="bi bi-check-lg"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" title="Rechazar"><i class="bi bi-x-lg"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Juan Pérez</td><td>Historia de Colombia</td><td>23/08/2026</td>
+                    <td><span class="badge bg-success">Aprobada</span></td>
+                    <td class="text-end">—</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

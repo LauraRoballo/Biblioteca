@@ -1,0 +1,41 @@
+@inherits LayoutComponentBase
+
+@* Layout del panel de Estudiante/Docente: Dashboard, Buscar Libros, Solicitar
+   Reserva, Mis Préstamos, Historial, Notificaciones, Perfil. *@
+
+<NavbarBiblioteca />
+
+<div class="panel-layout rol-estudiante">
+    <aside class="panel-sidebar">
+        <div class="panel-sidebar-header">
+            <i class="bi bi-mortarboard rol-icono"></i>
+            <div>
+                <h5>Estudiante / Docente</h5>
+                <small>Panel de usuario</small>
+            </div>
+        </div>
+        <ul class="panel-sidebar-nav">
+            <li><NavLink href="estudiante/dashboard" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-speedometer2"></i> Dashboard</NavLink></li>
+            <li><NavLink href="estudiante/buscar-libros" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-search"></i> Buscar Libros</NavLink></li>
+            <li><NavLink href="estudiante/reservar" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-bookmark-plus"></i> Solicitar Reserva</NavLink></li>
+            <li><NavLink href="estudiante/mis-prestamos" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-journal-check"></i> Mis Préstamos</NavLink></li>
+            <li><NavLink href="estudiante/historial" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-clock-history"></i> Historial</NavLink></li>
+            <li><NavLink href="estudiante/notificaciones" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-bell"></i> Notificaciones</NavLink></li>
+            <li><NavLink href="estudiante/perfil" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-person-circle"></i> Perfil</NavLink></li>
+        </ul>
+    </aside>
+
+    <div class="panel-content">
+        <div class="panel-topbar">
+            <span class="rol-pill"><i class="bi bi-mortarboard"></i> Estudiante / Docente</span>
+            <div class="panel-topbar-acciones">
+                <a href="panel"><i class="bi bi-arrow-left-right"></i> Cambiar de rol</a>
+                <a href="login"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+            </div>
+        </div>
+
+        @Body
+    </div>
+</div>
+
+<FooterBiblioteca />

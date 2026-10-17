@@ -1,0 +1,41 @@
+@page "/recuperar-contrasenia"
+
+<PageTitle>Recuperar contraseña</PageTitle>
+
+<div class="container my-5">
+    <div class="card shadow cardAuth">
+        <div class="card-body">
+            <div class="row align-items-center">
+
+                <!-- Columna izquierda -->
+                <div class="col-lg-4 text-center">
+                    <img src="img/candado-recuperar.png" class="iconoAuth" alt="Recuperar" />
+                    <p class="textoAuth mt-3">
+                        Ingrese su correo institucional para recibir un código de verificación.
+                    </p>
+                </div>
+
+                <!-- Recuperar contraseña -->
+                <div class="col-lg-8">
+                    <h2 class="mb-4">Recuperar contraseña</h2>
+
+                    <form action="codigo-recuperacion">
+                        <label for="correoRecuperacion" class="form-label">Correo institucional</label>
+                        <input type="email" class="form-control" id="correoRecuperacion" name="correoRecuperacion" placeholder="Ingrese su correo" required />
+
+                        <div class="text-center mt-4">
+                            <button class="btn botonPrincipal" type="submit">
+                                Confirmar
+                            </button>
+                        </div>
+                    </form>
+
+                    <a href="login" class="linkBiblioteca">
+                        Volver a iniciar sesión
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

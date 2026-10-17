@@ -1,0 +1,45 @@
+@inherits LayoutComponentBase
+
+@* Layout del panel de Administrador. Sigue el mapa de navegación jerárquico:
+   Dashboard, Gestión de Usuarios, Gestión de Libros, Préstamos, Devoluciones,
+   Reservas, Reportes y Estadísticas, Notificaciones, Configuración, Perfil. *@
+
+<NavbarBiblioteca />
+
+<div class="panel-layout rol-admin">
+    <aside class="panel-sidebar">
+        <div class="panel-sidebar-header">
+            <i class="bi bi-shield-lock rol-icono"></i>
+            <div>
+                <h5>Administrador</h5>
+                <small>Panel de gestión</small>
+            </div>
+        </div>
+        <ul class="panel-sidebar-nav">
+            <li><NavLink href="admin/dashboard" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-speedometer2"></i> Dashboard</NavLink></li>
+            <li><NavLink href="admin/usuarios" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-people"></i> Gestión de Usuarios</NavLink></li>
+            <li><NavLink href="admin/libros" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-journal-bookmark"></i> Gestión de Libros</NavLink></li>
+            <li><NavLink href="admin/prestamos" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-arrow-left-right"></i> Préstamos</NavLink></li>
+            <li><NavLink href="admin/devoluciones" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-arrow-return-left"></i> Devoluciones</NavLink></li>
+            <li><NavLink href="admin/reservas" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-calendar-check"></i> Reservas</NavLink></li>
+            <li><NavLink href="admin/reportes" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-bar-chart-line"></i> Reportes y Estadísticas</NavLink></li>
+            <li><NavLink href="admin/notificaciones" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-bell"></i> Notificaciones</NavLink></li>
+            <li><NavLink href="admin/configuracion" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-gear"></i> Configuración</NavLink></li>
+            <li><NavLink href="admin/perfil" Match="NavLinkMatch.All" ActiveClass="activo"><i class="bi bi-person-circle"></i> Perfil</NavLink></li>
+        </ul>
+    </aside>
+
+    <div class="panel-content">
+        <div class="panel-topbar">
+            <span class="rol-pill"><i class="bi bi-shield-lock"></i> Administrador</span>
+            <div class="panel-topbar-acciones">
+                <a href="panel"><i class="bi bi-arrow-left-right"></i> Cambiar de rol</a>
+                <a href="login"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+            </div>
+        </div>
+
+        @Body
+    </div>
+</div>
+
+<FooterBiblioteca />

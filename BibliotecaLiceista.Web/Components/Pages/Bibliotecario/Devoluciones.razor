@@ -1,0 +1,31 @@
+@page "/bibliotecario/devoluciones"
+@layout BibliotecarioLayout
+
+<PageTitle>Devoluciones · Bibliotecario</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-arrow-return-left"></i> Devoluciones</h2>
+    <button type="button" class="btn botonPrincipal"><i class="bi bi-plus-lg"></i> Registrar Devolución</button>
+</div>
+
+<div class="panel-card">
+    <h5>Devoluciones de hoy</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Libro</th>
+                    <th>Fecha de devolución</th>
+                    <th>Días de mora</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Juan Pérez</td><td>Historia de Colombia</td><td>13/08/2026</td><td>0</td><td><span class="badge bg-success">A tiempo</span></td></tr>
+                <tr><td>María Torres</td><td>El principito</td><td>15/08/2026</td><td>2</td><td><span class="badge bg-warning text-dark">Con mora</span></td></tr>
+                <tr><td>Carlos Ruiz</td><td>Física para bachillerato</td><td>18/08/2026</td><td>0</td><td><span class="badge bg-success">A tiempo</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>

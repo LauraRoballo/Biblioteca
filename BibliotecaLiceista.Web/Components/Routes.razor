@@ -1,0 +1,14 @@
+<Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(BibliotecaLiceista.Web.Client._Imports).Assembly }">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>No encontrado</PageTitle>
+        <LayoutView Layout="@typeof(Layout.MainLayout)">
+            <p role="alert" class="text-center mt-5">
+                Lo sentimos, no se encontró la página solicitada.
+            </p>
+        </LayoutView>
+    </NotFound>
+</Router>

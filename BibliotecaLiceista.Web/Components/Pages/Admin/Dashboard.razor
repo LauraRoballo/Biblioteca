@@ -1,0 +1,87 @@
+@page "/admin/dashboard"
+@layout AdminLayout
+
+<PageTitle>Dashboard · Administrador</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-journal-bookmark"></i></div>
+        <div>
+            <p class="stat-numero">1.248</p>
+            <p class="stat-label">Libros en catálogo</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-people"></i></div>
+        <div>
+            <p class="stat-numero">532</p>
+            <p class="stat-label">Usuarios registrados</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-arrow-left-right"></i></div>
+        <div>
+            <p class="stat-numero">87</p>
+            <p class="stat-label">Préstamos activos</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-calendar-check"></i></div>
+        <div>
+            <p class="stat-numero">14</p>
+            <p class="stat-label">Reservas pendientes</p>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card">
+    <h5>Actividad reciente</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th>Módulo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>26/08/2026</td>
+                    <td>María Torres</td>
+                    <td>Registró un nuevo libro</td>
+                    <td>Gestión de Libros</td>
+                </tr>
+                <tr>
+                    <td>26/08/2026</td>
+                    <td>Juan Pérez</td>
+                    <td>Renovó un préstamo</td>
+                    <td>Préstamos</td>
+                </tr>
+                <tr>
+                    <td>25/08/2026</td>
+                    <td>Laura Gómez</td>
+                    <td>Se registró en el sistema</td>
+                    <td>Gestión de Usuarios</td>
+                </tr>
+                <tr>
+                    <td>25/08/2026</td>
+                    <td>Carlos Ruiz</td>
+                    <td>Aprobó una reserva</td>
+                    <td>Reservas</td>
+                </tr>
+                <tr>
+                    <td>24/08/2026</td>
+                    <td>Sistema</td>
+                    <td>Generó copia de seguridad</td>
+                    <td>Configuración</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

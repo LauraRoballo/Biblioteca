@@ -1,0 +1,59 @@
+@page "/estudiante/dashboard"
+@layout EstudianteLayout
+
+<PageTitle>Dashboard · Estudiante</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-journal-check"></i></div>
+        <div>
+            <p class="stat-numero">2</p>
+            <p class="stat-label">Préstamos activos</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-bookmark-plus"></i></div>
+        <div>
+            <p class="stat-numero">1</p>
+            <p class="stat-label">Reservas activas</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-journal-bookmark"></i></div>
+        <div>
+            <p class="stat-numero">1.248</p>
+            <p class="stat-label">Libros disponibles</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icono"><i class="bi bi-bell"></i></div>
+        <div>
+            <p class="stat-numero">3</p>
+            <p class="stat-label">Notificaciones nuevas</p>
+        </div>
+    </div>
+</div>
+
+<div class="panel-card">
+    <h5>Mis préstamos recientes</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Libro</th>
+                    <th>Fecha de préstamo</th>
+                    <th>Fecha límite</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>El principito</td><td>19/08/2026</td><td>27/08/2026</td><td><span class="badge bg-success">Activo</span></td></tr>
+                <tr><td>Cálculo diferencial</td><td>22/08/2026</td><td>30/08/2026</td><td><span class="badge bg-success">Activo</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>

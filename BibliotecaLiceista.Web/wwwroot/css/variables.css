@@ -1,0 +1,16 @@
+:root {
+    --color-primario: #0A2E63;
+    --color-botones: #C7A04A;
+    --color-fondo: #F5F5F5;
+    --color-error: #F12D2D;
+    --color-exito: #2DBE5F;
+    --color-texto: #1D1D1D;
+     --radio:10px;
+
+
+    --color-admin: #4C8C4A;
+    --color-bibliotecario: #E08A3C;
+    --color-estudiante: #8965C4;
+    --color-publico: #6FA8DC;
+
+}

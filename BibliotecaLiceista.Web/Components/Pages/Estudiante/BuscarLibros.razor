@@ -1,0 +1,73 @@
+@page "/estudiante/buscar-libros"
+@layout EstudianteLayout
+
+<PageTitle>Buscar Libros · Estudiante</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-search"></i> Buscar Libros</h2>
+</div>
+
+<div class="panel-card">
+    <input type="search" class="form-control panel-busqueda" placeholder="Buscar por título, autor o categoría..." />
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Categoría</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cien años de soledad</td><td>Gabriel García Márquez</td><td>Literatura</td>
+                    <td><span class="badge bg-success">Disponible</span></td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalDetalleLibro" title="Ver detalle"><i class="bi bi-eye"></i></button>
+                        <a href="estudiante/reservar" class="btn btn-sm botonPrincipal" title="Reservar">Reservar</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>El principito</td><td>Antoine de Saint-Exupéry</td><td>Infantil</td>
+                    <td><span class="badge bg-danger">Prestado</span></td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalDetalleLibro" title="Ver detalle"><i class="bi bi-eye"></i></button>
+                        <a href="estudiante/reservar" class="btn btn-sm botonPrincipal" title="Reservar">Reservar</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Física para bachillerato</td><td>Serway / Jewett</td><td>Ciencias</td>
+                    <td><span class="badge bg-success">Disponible</span></td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalDetalleLibro" title="Ver detalle"><i class="bi bi-eye"></i></button>
+                        <a href="estudiante/reservar" class="btn btn-sm botonPrincipal" title="Reservar">Reservar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal: Ver detalle del libro (visual, sin backend) -->
+<div class="modal fade" id="modalDetalleLibro" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle del libro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Título:</strong> Cien años de soledad</p>
+                <p><strong>Autor:</strong> Gabriel García Márquez</p>
+                <p><strong>Categoría:</strong> Literatura</p>
+                <p class="mb-0"><strong>Disponibilidad:</strong> 4 de 5 ejemplares</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <a href="estudiante/reservar" class="btn botonPrincipal">Reservar</a>
+            </div>
+        </div>
+    </div>
+</div>

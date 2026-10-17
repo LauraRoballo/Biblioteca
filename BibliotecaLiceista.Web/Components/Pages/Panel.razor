@@ -1,0 +1,65 @@
+@page "/panel"
+
+<PageTitle>Seleccionar rol</PageTitle>
+
+@* Selector de rol temporal: como todavía no hay autenticación real ni backend,
+   esta pantalla reemplaza por ahora la redirección automática que haría el
+   login según el rol del usuario. Cuando exista autenticación, esta página
+   deja de ser necesaria y "Iniciar sesión" debería llevar directo al panel
+   correspondiente. *@
+
+<div class="container my-5">
+
+    <div class="text-center mb-5">
+        <h2>¿Cómo querés ingresar?</h2>
+        <p class="textoAuth">
+            Todavía no hay inicio de sesión real, así que elegí con qué rol
+            querés navegar la aplicación.
+        </p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+
+        <div class="col-md-4">
+            <a href="admin/dashboard" class="text-decoration-none">
+                <div class="panel-card text-center h-100 rol-admin">
+                    <div class="stat-icono mx-auto mb-3" style="width:64px;height:64px;font-size:28px;">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+                    <h5 class="text-dark">Administrador</h5>
+                    <p class="textoAuth mb-0">Gestión completa del sistema</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="bibliotecario/dashboard" class="text-decoration-none">
+                <div class="panel-card text-center h-100 rol-bibliotecario">
+                    <div class="stat-icono mx-auto mb-3" style="width:64px;height:64px;font-size:28px;">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                    <h5 class="text-dark">Bibliotecario</h5>
+                    <p class="textoAuth mb-0">Préstamos, devoluciones y reservas</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="estudiante/dashboard" class="text-decoration-none">
+                <div class="panel-card text-center h-100 rol-estudiante">
+                    <div class="stat-icono mx-auto mb-3" style="width:64px;height:64px;font-size:28px;">
+                        <i class="bi bi-mortarboard"></i>
+                    </div>
+                    <h5 class="text-dark">Estudiante / Docente</h5>
+                    <p class="textoAuth mb-0">Buscar libros y gestionar mis préstamos</p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+    <a href="login" class="linkBiblioteca">
+        Volver a iniciar sesión
+    </a>
+
+</div>

@@ -1,0 +1,47 @@
+@page "/estudiante/reservar"
+@layout EstudianteLayout
+
+<PageTitle>Solicitar Reserva · Estudiante</PageTitle>
+
+<div class="panel-titulo">
+    <h2><i class="bi bi-bookmark-plus"></i> Solicitar Reserva</h2>
+</div>
+
+<div class="panel-card">
+    <h5>Nueva reserva</h5>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Libro</label>
+            <select class="form-select" required>
+                <option value="">Seleccione un libro...</option>
+                <option>Cien años de soledad</option>
+                <option>El principito</option>
+                <option>Física para bachillerato</option>
+                <option>Cálculo diferencial</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Fecha deseada de retiro</label>
+            <input type="date" class="form-control" required />
+        </div>
+    </div>
+    <button type="button" class="btn botonPrincipal mt-3">Reservar libro</button>
+</div>
+
+<div class="panel-card">
+    <h5>Mis reservas</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Libro</th>
+                    <th>Fecha de reserva</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>El principito</td><td>24/08/2026</td><td><span class="badge bg-warning text-dark">Pendiente</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
