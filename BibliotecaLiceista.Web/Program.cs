@@ -1,15 +1,19 @@
 using BibliotecaLiceista.Web.Components;
+using BibliotecaLiceista.Web.Data;
+using BibliotecaLiceista.Web.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Componentes Razor con interactividad en el servidor
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
-    .AddInteractiveWebAssemblyComponents();
+    .AddInteractiveServerComponents();
+
+// Acceso a datos (ADO.NET)
+builder.Services.AddSingleton<ConexionBd>();
+builder.Services.AddScoped<LibroRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/error", createScopeForErrors: true);
@@ -17,13 +21,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(BibliotecaLiceista.Web.Client._Imports).Assembly);
+    .AddInteractiveServerRenderMode();
 
 app.Run();
