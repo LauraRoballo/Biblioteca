@@ -1,21 +1,227 @@
-@page "/bibliotecario/prestamos"
+﻿@page "/bibliotecario/prestamos"
 @layout BibliotecarioLayout
+@using System.Security.Claims
+@inject PrestamoRepository PrestamoRepository
+@inject UsuarioRepository UsuarioRepository
+@inject PrestamoService PrestamoService
+
+@* Módulo de préstamos (RF-005, RF-006 y RF-011).
+   Pantalla del bibliotecario para registrar, consultar, devolver y anular préstamos.
+   Las reglas de negocio se validan en PrestamoService; aquí solo se maneja la pantalla. *@
 
 <PageTitle>Préstamos · Bibliotecario</PageTitle>
 
 <div class="panel-titulo">
     <h2><i class="bi bi-arrow-left-right"></i> Préstamos</h2>
-    <button type="button" class="btn botonPrincipal"><i class="bi bi-plus-lg"></i> Registrar Préstamo</button>
+    @if (!mostrarFormularioPrestamo)
+    {
+        <button type="button" class="btn botonPrincipal" @onclick="AbrirFormularioPrestamoAsync">
+            <i class="bi bi-plus-lg"></i> Registrar Préstamo
+        </button>
+    }
 </div>
 
+@* ---------- MENSAJES ---------- *@
+@if (!string.IsNullOrEmpty(mensajeExito))
+{
+    <div class="alert alert-success">@mensajeExito</div>
+}
+@if (listaErrores.Count > 0)
+{
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach (var error in listaErrores)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+@* ---------- FORMULARIO: REGISTRAR PRÉSTAMO ---------- *@
+@if (mostrarFormularioPrestamo)
+{
+    <div class="panel-card mb-3">
+        <h5>Registrar préstamo</h5>
+        <EditForm Model="nuevoPrestamo" OnValidSubmit="RegistrarPrestamoAsync">
+            <DataAnnotationsValidator />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="usuarioPrestamo" class="form-label">Usuario (alumno o docente) *</label>
+                    <InputSelect id="usuarioPrestamo" class="form-select"
+                                 @bind-Value="nuevoPrestamo.IDUsuario" @bind-Value:after="AlCambiarUsuarioAsync">
+                        <option value="0">Seleccione...</option>
+                        @foreach (var usuario in listaPrestatarios)
+                        {
+                            <option value="@usuario.IDUsuario">@usuario.Nombre @usuario.Apellido – @usuario.NombreTipoUsuario</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="() => nuevoPrestamo.IDUsuario" class="text-danger" />
+                    @if (usuarioSeleccionado is not null)
+                    {
+                        <small class="text-muted d-block mt-1">
+                            @usuarioSeleccionado.NombreTipoUsuario: máximo @maximoLibrosUsuario libro(s),
+                            tiene @librosPrestadosUsuario prestado(s). Préstamo hasta @diasMaximosUsuario días.
+                        </small>
+                    }
+                </div>
+
+                <div class="col-md-3">
+                    <label for="fechaPrestamo" class="form-label">Fecha del préstamo</label>
+                    <input type="text" id="fechaPrestamo" class="form-control" value="@DateTime.Today.ToString("dd/MM/yyyy")" readonly />
+                </div>
+
+                <div class="col-md-3">
+                    <label for="fechaLimite" class="form-label">Fecha límite *</label>
+                    <InputDate id="fechaLimite" class="form-control" @bind-Value="nuevoPrestamo.FechaLimite" />
+                    <ValidationMessage For="() => nuevoPrestamo.FechaLimite" class="text-danger" />
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">
+                        Ejemplares disponibles *
+                        <small class="text-muted">(@nuevoPrestamo.IDsEjemplares.Count seleccionado(s))</small>
+                    </label>
+                    @if (listaEjemplaresDisponibles.Count == 0)
+                    {
+                        <p class="text-muted mb-0">No hay ejemplares disponibles para prestar.</p>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            @foreach (var ejemplar in listaEjemplaresDisponibles)
+                            {
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="ejemplar-@ejemplar.IDEjemplar"
+                                               checked="@nuevoPrestamo.IDsEjemplares.Contains(ejemplar.IDEjemplar)"
+                                               @onchange="evento => AlternarEjemplar(ejemplar.IDEjemplar, evento)" />
+                                        <label class="form-check-label" for="ejemplar-@ejemplar.IDEjemplar">
+                                            @ejemplar.Titulo <small class="text-muted">(@ejemplar.CodigoInventario)</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn botonPrincipal" disabled="@procesando">
+                    <i class="bi bi-check-lg"></i> Guardar préstamo
+                </button>
+                <button type="button" class="btn btn-outline-secondary" @onclick="CerrarFormularioPrestamo">Cancelar</button>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@* ---------- FORMULARIO: REGISTRAR DEVOLUCIÓN ---------- *@
+@if (prestamoEnDevolucion is not null)
+{
+    <div class="panel-card mb-3">
+        <h5>Registrar devolución · Préstamo #@prestamoEnDevolucion.IDPrestamo</h5>
+        <p class="mb-3">
+            <strong>@prestamoEnDevolucion.NombreUsuario</strong> · @prestamoEnDevolucion.Libros<br />
+            <small class="text-muted">
+                Prestado el @prestamoEnDevolucion.FechaPrestamo.ToString("dd/MM/yyyy") ·
+                fecha límite @prestamoEnDevolucion.FechaLimite.ToString("dd/MM/yyyy")
+            </small>
+        </p>
+
+        <EditForm Model="devolucion" OnValidSubmit="RegistrarDevolucionAsync">
+            <DataAnnotationsValidator />
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="fechaDevolucion" class="form-label">Fecha de devolución *</label>
+                    <InputDate id="fechaDevolucion" class="form-control" @bind-Value="devolucion.FechaDevolucion" />
+                    <ValidationMessage For="() => devolucion.FechaDevolucion" class="text-danger" />
+                </div>
+                <div class="col-md-8">
+                    <label for="observaciones" class="form-label">
+                        Observaciones <small class="text-muted">(@(devolucion.Observaciones?.Length ?? 0)/200)</small>
+                    </label>
+                    <InputTextArea id="observaciones" class="form-control" rows="2" @bind-Value="devolucion.Observaciones"
+                                   placeholder="Estado en que se recibe el libro, novedades..." />
+                    <ValidationMessage For="() => devolucion.Observaciones" class="text-danger" />
+                </div>
+            </div>
+
+            @* Vista previa de la multa según la fecha escogida *@
+            @if (devolucion.FechaDevolucion is DateTime fechaEscogida)
+            {
+                var (diasRetraso, multaPorEjemplar) = PrestamoService.CalcularMulta(prestamoEnDevolucion.FechaLimite, fechaEscogida);
+                <div class="alert @(diasRetraso == 0 ? "alert-success" : "alert-warning") py-2 mt-3 mb-0">
+                    @if (diasRetraso == 0)
+                    {
+                        <span>Devolución a tiempo: sin multa.</span>
+                    }
+                    else
+                    {
+                        <span>
+                            @diasRetraso día(s) de retraso × @PrestamoService.FormatearPesos(PrestamoService.MultaPorDia)
+                            × @prestamoEnDevolucion.CantidadLibros libro(s) =
+                            <strong>@PrestamoService.FormatearPesos(multaPorEjemplar * prestamoEnDevolucion.CantidadLibros)</strong>
+                        </span>
+                    }
+                </div>
+            }
+
+            <div class="mt-3">
+                <button type="submit" class="btn botonPrincipal" disabled="@procesando">
+                    <i class="bi bi-check-lg"></i> Registrar devolución
+                </button>
+                <button type="button" class="btn btn-outline-secondary" @onclick="CerrarDevolucion">Cancelar</button>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@* ---------- CONFIRMACIÓN: ANULAR PRÉSTAMO ---------- *@
+@if (prestamoPorAnular is not null)
+{
+    <div class="alert alert-warning d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <span>
+            ¿Anular el préstamo #@prestamoPorAnular.IDPrestamo de @prestamoPorAnular.NombreUsuario?
+            Los ejemplares volverán a quedar disponibles.
+        </span>
+        <span>
+            <button type="button" class="btn btn-sm btn-danger" @onclick="ConfirmarAnulacionAsync">Sí, anular</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="CancelarAnulacion">No</button>
+        </span>
+    </div>
+}
+
+@* ---------- LISTADO DE PRÉSTAMOS ---------- *@
 <div class="panel-card">
-    <h5>Préstamos activos</h5>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h5 class="mb-0">Préstamos (@listaPrestamos.Count)</h5>
+        <div class="d-flex gap-2 flex-wrap">
+            <select class="form-select" style="width:auto;" @bind="filtroEstado" @bind:after="CargarPrestamosAsync">
+                <option value="0">Todos los estados</option>
+                <option value="@EstadosPrestamo.Prestado">Prestado</option>
+                <option value="@EstadosPrestamo.Retrasado">Retrasado</option>
+                <option value="@EstadosPrestamo.Devuelto">Devuelto</option>
+            </select>
+            <input type="search" class="form-control panel-busqueda" style="margin-bottom:0;" maxlength="100"
+                   placeholder="Buscar por usuario o correo..."
+                   @bind="filtroTexto" @bind:event="oninput" @onkeydown="BuscarConEnterAsync" />
+            <button type="button" class="btn btn-outline-secondary" @onclick="CargarPrestamosAsync">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Usuario</th>
-                    <th>Libro</th>
+                    <th>Libros</th>
                     <th>Fecha de préstamo</th>
                     <th>Fecha límite</th>
                     <th>Estado</th>
@@ -23,22 +229,261 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Laura Gómez</td><td>El principito</td><td>19/08/2026</td><td>27/08/2026</td>
-                    <td><span class="badge bg-success">Activo</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-secondary" title="Renovar"><i class="bi bi-arrow-repeat"></i></button></td>
-                </tr>
-                <tr>
-                    <td>Carlos Ruiz</td><td>Cálculo diferencial</td><td>10/08/2026</td><td>18/08/2026</td>
-                    <td><span class="badge bg-danger">Vencido</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-secondary" title="Renovar"><i class="bi bi-arrow-repeat"></i></button></td>
-                </tr>
-                <tr>
-                    <td>Ana Ramírez</td><td>Cien años de soledad</td><td>22/08/2026</td><td>30/08/2026</td>
-                    <td><span class="badge bg-success">Activo</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-secondary" title="Renovar"><i class="bi bi-arrow-repeat"></i></button></td>
-                </tr>
+                @foreach (var prestamo in listaPrestamos)
+                {
+                    <tr class="@(prestamo.IDEstadoPrestamo == EstadosPrestamo.Retrasado ? "table-danger" : "")">
+                        <td>@prestamo.IDPrestamo</td>
+                        <td>@prestamo.NombreUsuario<br /><small class="text-muted">@prestamo.NombreTipoUsuario</small></td>
+                        <td>@prestamo.Libros <small class="text-muted">(@prestamo.CantidadLibros)</small></td>
+                        <td>@prestamo.FechaPrestamo.ToString("dd/MM/yyyy")</td>
+                        <td>@prestamo.FechaLimite.ToString("dd/MM/yyyy")</td>
+                        <td><span class="badge @ObtenerClaseEstado(prestamo.IDEstadoPrestamo)">@prestamo.NombreEstado</span></td>
+                        <td class="text-end text-nowrap">
+                            @if (prestamo.EstaActivo)
+                            {
+                                <button type="button" class="btn btn-sm btn-outline-secondary" title="Registrar devolución"
+                                        @onclick="() => AbrirDevolucion(prestamo)">
+                                    <i class="bi bi-arrow-return-left"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" title="Anular préstamo"
+                                        @onclick="() => SolicitarAnulacion(prestamo)">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+
+                @if (listaPrestamos.Count == 0)
+                {
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No hay préstamos para mostrar.</td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
+
+@code {
+    /// <summary>Usuario que inició sesión; se guarda como bibliotecario que registra el préstamo.</summary>
+    [CascadingParameter] private Task<AuthenticationState>? EstadoAutenticacion { get; set; }
+
+    // Datos de la pantalla
+    private List<PrestamoResumen> listaPrestamos = new();
+    private List<Usuario> listaPrestatarios = new();
+    private List<TipoUsuario> listaTiposUsuario = new();
+    private List<EjemplarDisponible> listaEjemplaresDisponibles = new();
+
+    // Formularios
+    private NuevoPrestamoFormulario nuevoPrestamo = new();
+    private DevolucionFormulario devolucion = new();
+    private PrestamoResumen? prestamoEnDevolucion;
+    private PrestamoResumen? prestamoPorAnular;
+
+    // Información del usuario escogido en el formulario de préstamo
+    private Usuario? usuarioSeleccionado;
+    private int maximoLibrosUsuario;
+    private int librosPrestadosUsuario;
+    private int diasMaximosUsuario;
+
+    // Estado de la pantalla
+    private bool mostrarFormularioPrestamo;
+    private bool procesando;
+    private int filtroEstado;
+    private string filtroTexto = string.Empty;
+    private string? mensajeExito;
+    private List<string> listaErrores = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Antes de listar, los préstamos vencidos pasan a "Retrasado"
+        await PrestamoRepository.ActualizarRetrasadosAsync();
+        await CargarPrestamosAsync();
+    }
+
+    /// <summary>Consulta los préstamos con los filtros actuales.</summary>
+    private async Task CargarPrestamosAsync()
+    {
+        listaPrestamos = await PrestamoRepository.ConsultarAsync(filtroEstado == 0 ? null : filtroEstado, filtroTexto);
+    }
+
+    private async Task BuscarConEnterAsync(KeyboardEventArgs evento)
+    {
+        if (evento.Key == "Enter")
+        {
+            await CargarPrestamosAsync();
+        }
+    }
+
+    // ---------- REGISTRAR PRÉSTAMO ----------
+
+    /// <summary>Carga los alumnos, docentes y ejemplares disponibles y muestra el formulario.</summary>
+    private async Task AbrirFormularioPrestamoAsync()
+    {
+        LimpiarMensajes();
+        prestamoEnDevolucion = null;
+        prestamoPorAnular = null;
+
+        var listaUsuarios = await UsuarioRepository.ConsultarTodosAsync();
+        listaPrestatarios = listaUsuarios.Where(usuario => PrestamoService.PuedeRecibirPrestamos(usuario.NombreTipoUsuario)).ToList();
+        listaTiposUsuario = await UsuarioRepository.ConsultarTiposUsuarioAsync();
+        listaEjemplaresDisponibles = await PrestamoRepository.ConsultarEjemplaresDisponiblesAsync();
+
+        nuevoPrestamo = new NuevoPrestamoFormulario();
+        usuarioSeleccionado = null;
+        mostrarFormularioPrestamo = true;
+    }
+
+    /// <summary>
+    /// Al escoger un usuario se muestran sus límites (RN-01 y RN-02)
+    /// y se propone como fecha límite el máximo permitido para su rol.
+    /// </summary>
+    private async Task AlCambiarUsuarioAsync()
+    {
+        usuarioSeleccionado = listaPrestatarios.FirstOrDefault(usuario => usuario.IDUsuario == nuevoPrestamo.IDUsuario);
+        if (usuarioSeleccionado is null)
+        {
+            return;
+        }
+
+        maximoLibrosUsuario = listaTiposUsuario
+            .FirstOrDefault(tipo => tipo.IDTipoUsuario == usuarioSeleccionado.IDTipoUsuario)?.MaxLibros ?? 0;
+        librosPrestadosUsuario = await PrestamoRepository.ContarLibrosPrestadosAsync(usuarioSeleccionado.IDUsuario);
+        diasMaximosUsuario = PrestamoService.ObtenerDiasMaximos(usuarioSeleccionado.NombreTipoUsuario);
+        nuevoPrestamo.FechaLimite = DateTime.Today.AddDays(diasMaximosUsuario);
+    }
+
+    /// <summary>Marca o desmarca un ejemplar en la lista de ejemplares a prestar.</summary>
+    private void AlternarEjemplar(int idEjemplar, ChangeEventArgs evento)
+    {
+        if (evento.Value is true)
+        {
+            if (!nuevoPrestamo.IDsEjemplares.Contains(idEjemplar))
+            {
+                nuevoPrestamo.IDsEjemplares.Add(idEjemplar);
+            }
+        }
+        else
+        {
+            nuevoPrestamo.IDsEjemplares.Remove(idEjemplar);
+        }
+    }
+
+    private async Task RegistrarPrestamoAsync()
+    {
+        LimpiarMensajes();
+        procesando = true;
+        var resultado = await PrestamoService.RegistrarPrestamoAsync(nuevoPrestamo, await ObtenerIdUsuarioSesionAsync());
+        procesando = false;
+
+        if (resultado.Exitoso)
+        {
+            mensajeExito = resultado.Mensaje;
+            mostrarFormularioPrestamo = false;
+            await CargarPrestamosAsync();
+        }
+        else
+        {
+            listaErrores = resultado.Errores;
+        }
+    }
+
+    private void CerrarFormularioPrestamo()
+    {
+        mostrarFormularioPrestamo = false;
+        LimpiarMensajes();
+    }
+
+    // ---------- REGISTRAR DEVOLUCIÓN ----------
+
+    private void AbrirDevolucion(PrestamoResumen prestamo)
+    {
+        LimpiarMensajes();
+        mostrarFormularioPrestamo = false;
+        prestamoPorAnular = null;
+        prestamoEnDevolucion = prestamo;
+        devolucion = new DevolucionFormulario { FechaDevolucion = DateTime.Today };
+    }
+
+    private async Task RegistrarDevolucionAsync()
+    {
+        LimpiarMensajes();
+        procesando = true;
+        var resultado = await PrestamoService.RegistrarDevolucionAsync(prestamoEnDevolucion!, devolucion);
+        procesando = false;
+
+        if (resultado.Exitoso)
+        {
+            mensajeExito = resultado.Mensaje;
+            prestamoEnDevolucion = null;
+            await CargarPrestamosAsync();
+        }
+        else
+        {
+            listaErrores = resultado.Errores;
+        }
+    }
+
+    private void CerrarDevolucion()
+    {
+        prestamoEnDevolucion = null;
+        LimpiarMensajes();
+    }
+
+    // ---------- ANULAR PRÉSTAMO ----------
+
+    private void SolicitarAnulacion(PrestamoResumen prestamo)
+    {
+        LimpiarMensajes();
+        mostrarFormularioPrestamo = false;
+        prestamoEnDevolucion = null;
+        prestamoPorAnular = prestamo;
+    }
+
+    private async Task ConfirmarAnulacionAsync()
+    {
+        var resultado = await PrestamoService.AnularPrestamoAsync(prestamoPorAnular!.IDPrestamo);
+        prestamoPorAnular = null;
+
+        if (resultado.Exitoso)
+        {
+            mensajeExito = resultado.Mensaje;
+            await CargarPrestamosAsync();
+        }
+        else
+        {
+            listaErrores = resultado.Errores;
+        }
+    }
+
+    private void CancelarAnulacion() => prestamoPorAnular = null;
+
+    // ---------- APOYO ----------
+
+    /// <summary>Lee el identificador del usuario en sesión desde su cookie (claim NameIdentifier).</summary>
+    private async Task<int?> ObtenerIdUsuarioSesionAsync()
+    {
+        if (EstadoAutenticacion is null)
+        {
+            return null;
+        }
+
+        var estado = await EstadoAutenticacion;
+        return int.TryParse(estado.User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out int idUsuario) ? idUsuario : null;
+    }
+
+    private void LimpiarMensajes()
+    {
+        mensajeExito = null;
+        listaErrores = new List<string>();
+    }
+
+    /// <summary>Color de la etiqueta según el estado del préstamo.</summary>
+    private static string ObtenerClaseEstado(int idEstadoPrestamo) => idEstadoPrestamo switch
+    {
+        EstadosPrestamo.Prestado => "bg-success",
+        EstadosPrestamo.Retrasado => "bg-danger",
+        _ => "bg-secondary"
+    };
+}

@@ -1,31 +1,108 @@
-@page "/bibliotecario/devoluciones"
+﻿@page "/bibliotecario/devoluciones"
 @layout BibliotecarioLayout
+@inject PrestamoRepository PrestamoRepository
+
+@* Historial de devoluciones (RF-006). Las devoluciones se registran desde la pantalla de Préstamos. *@
 
 <PageTitle>Devoluciones · Bibliotecario</PageTitle>
 
 <div class="panel-titulo">
     <h2><i class="bi bi-arrow-return-left"></i> Devoluciones</h2>
-    <button type="button" class="btn botonPrincipal"><i class="bi bi-plus-lg"></i> Registrar Devolución</button>
+    <a href="bibliotecario/prestamos" class="btn botonPrincipal"><i class="bi bi-plus-lg"></i> Registrar Devolución</a>
 </div>
 
 <div class="panel-card">
-    <h5>Devoluciones de hoy</h5>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h5 class="mb-0">
+            Historial de devoluciones (@listaDevoluciones.Count)
+            @if (TotalMultas > 0)
+            {
+                <small class="text-muted">· multas: @PrestamoService.FormatearPesos(TotalMultas)</small>
+            }
+        </h5>
+        <div class="d-flex gap-2">
+            <input type="search" class="form-control panel-busqueda" style="margin-bottom:0;" maxlength="100"
+                   placeholder="Buscar por usuario o libro..."
+                   @bind="textoBusqueda" @bind:event="oninput" @onkeydown="BuscarConEnterAsync" />
+            <button type="button" class="btn btn-outline-secondary" @onclick="CargarDevolucionesAsync">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
+                    <th>Préstamo</th>
                     <th>Usuario</th>
                     <th>Libro</th>
+                    <th>Fecha límite</th>
                     <th>Fecha de devolución</th>
-                    <th>Días de mora</th>
+                    <th>Días de retraso</th>
+                    <th>Multa</th>
                     <th>Estado</th>
+                    <th>Observaciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td>Juan Pérez</td><td>Historia de Colombia</td><td>13/08/2026</td><td>0</td><td><span class="badge bg-success">A tiempo</span></td></tr>
-                <tr><td>María Torres</td><td>El principito</td><td>15/08/2026</td><td>2</td><td><span class="badge bg-warning text-dark">Con mora</span></td></tr>
-                <tr><td>Carlos Ruiz</td><td>Física para bachillerato</td><td>18/08/2026</td><td>0</td><td><span class="badge bg-success">A tiempo</span></td></tr>
+                @foreach (var devolucion in listaDevoluciones)
+                {
+                    <tr>
+                        <td>#@devolucion.IDPrestamo</td>
+                        <td>@devolucion.NombreUsuario</td>
+                        <td>@devolucion.Titulo <small class="text-muted">(@devolucion.CodigoInventario)</small></td>
+                        <td>@devolucion.FechaLimite.ToString("dd/MM/yyyy")</td>
+                        <td>@devolucion.FechaDevolucion.ToString("dd/MM/yyyy")</td>
+                        <td>@devolucion.DiasRetraso</td>
+                        <td>@PrestamoService.FormatearPesos(devolucion.Multa)</td>
+                        <td>
+                            @if (devolucion.DiasRetraso == 0)
+                            {
+                                <span class="badge bg-success">A tiempo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Con retraso</span>
+                            }
+                        </td>
+                        <td>@devolucion.Observaciones</td>
+                    </tr>
+                }
+
+                @if (listaDevoluciones.Count == 0)
+                {
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">No hay devoluciones para mostrar.</td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
+
+@code {
+    private List<DevolucionResumen> listaDevoluciones = new();
+    private string textoBusqueda = string.Empty;
+
+    /// <summary>Suma de las multas de las devoluciones que se están mostrando.</summary>
+    private decimal TotalMultas => listaDevoluciones.Sum(devolucion => devolucion.Multa);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarDevolucionesAsync();
+    }
+
+    private async Task CargarDevolucionesAsync()
+    {
+        listaDevoluciones = await PrestamoRepository.ConsultarDevolucionesAsync(textoBusqueda);
+    }
+
+    private async Task BuscarConEnterAsync(KeyboardEventArgs evento)
+    {
+        if (evento.Key == "Enter")
+        {
+            await CargarDevolucionesAsync();
+        }
+    }
+}
