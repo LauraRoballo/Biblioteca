@@ -1,5 +1,12 @@
-@page "/"
+﻿@page "/"
 @page "/login"
+@attribute [ExcludeFromInteractiveRouting]
+@using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject UsuarioRepository UsuarioRepository
+@inject NavigationManager Navegacion
 
 <PageTitle>Login</PageTitle>
 
@@ -12,19 +19,27 @@
                 <div class="card cardLogin shadow">
                     <div class="card-body">
                         <h2 class="card-title">Iniciar sesión</h2>
-                        <form class="login" action="panel">
+
+                        <EditForm Model="Credenciales" FormName="login" OnValidSubmit="IniciarSesionAsync" class="login">
+                            <DataAnnotationsValidator />
+
                             <label for="correoInstitucional">Correo institucional:</label>
-                            <input class="form-control" type="email" id="correoInstitucional" name="correoInstitucional" placeholder="Ingrese su correo institucional" required />
+                            <InputText class="form-control" type="email" id="correoInstitucional"
+                                       @bind-Value="Credenciales.Correo" placeholder="Ingrese su correo institucional" />
+                            <ValidationMessage For="() => Credenciales.Correo" class="text-danger" />
 
                             <label for="contrasenia">Contraseña:</label>
-                            <input class="form-control" type="password" id="contrasenia" name="contrasenia" placeholder="Ingrese su contraseña" required />
+                            <InputText class="form-control" type="password" id="contrasenia"
+                                       @bind-Value="Credenciales.Contrasenia" placeholder="Ingrese su contraseña" />
+                            <ValidationMessage For="() => Credenciales.Contrasenia" class="text-danger" />
 
                             <div class="text-center">
                                 <button class="btn botonPrincipal" type="submit">
                                     Iniciar sesión
                                 </button>
                             </div>
-                        </form>
+                        </EditForm>
+
                         <a href="recuperar-contrasenia" class="linkBiblioteca">
                             ¿Olvidó su contraseña?
                         </a>
@@ -42,21 +57,73 @@
 
 </div>
 
-<!-- Alerta (se activará cuando exista backend que determine cuándo mostrarla) -->
-<div class="alertaBiblioteca d-none" id="alertaError">
+@if (mostrarError)
+{
+    <!-- Alerta de credenciales incorrectas -->
+    <div class="alertaBiblioteca" id="alertaError">
 
-    <div class="alertaIcono">
-        <img src="img/exclamacion.png" alt="Error" />
+        <div class="alertaIcono">
+            <img src="img/exclamacion.png" alt="Error" />
+        </div>
+
+        <div class="alertaMensaje">
+            <h5>Credenciales incorrectas</h5>
+            <p>
+                El correo institucional o la contraseña son incorrectos.
+                Inténtelo nuevamente.
+            </p>
+        </div>
+
+        <button class="btn-close" onclick="cerrarAlerta()"></button>
+
     </div>
+}
 
-    <div class="alertaMensaje">
-        <h5>Credenciales incorrectas</h5>
-        <p>
-            El correo institucional o la contraseña son incorrectos.
-            Inténtelo nuevamente.
-        </p>
-    </div>
+@code {
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
-    <button class="btn-close" onclick="cerrarAlerta()"></button>
+    [SupplyParameterFromForm] private CredencialesLogin Credenciales { get; set; } = new();
 
-</div>
+    private bool mostrarError;
+
+    private async Task IniciarSesionAsync()
+    {
+        var usuario = await UsuarioRepository.ConsultarPorCorreoAsync(Credenciales.Correo);
+
+        if (usuario is null || !UsuarioRepository.VerificarContrasenia(usuario, Credenciales.Contrasenia))
+        {
+            mostrarError = true;
+            return;
+        }
+
+        // Datos del usuario que viajan en la cookie de sesión
+        var listaClaims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, usuario.IDUsuario.ToString()),
+            new(ClaimTypes.Name, $"{usuario.Nombre} {usuario.Apellido}"),
+            new(ClaimTypes.Email, usuario.Correo),
+            new(ClaimTypes.Role, usuario.NombreTipoUsuario ?? string.Empty)
+        };
+        var identidad = new ClaimsIdentity(listaClaims, CookieAuthenticationDefaults.AuthenticationScheme);
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identidad));
+
+        Navegacion.NavigateTo(ObtenerPanelPorRol(usuario.NombreTipoUsuario), forceLoad: true);
+    }
+
+    private static string ObtenerPanelPorRol(string? nombreRol) => nombreRol switch
+    {
+        RolesUsuario.Administrador => "admin/dashboard",
+        RolesUsuario.Bibliotecario => "bibliotecario/dashboard",
+        _ => "estudiante/dashboard"          // Alumno y Docente
+    };
+
+    private class CredencialesLogin
+    {
+        [Required(ErrorMessage = "Ingrese el correo institucional.")]
+        [EmailAddress(ErrorMessage = "El correo no es válido.")]
+        public string Correo { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Ingrese la contraseña.")]
+        public string Contrasenia { get; set; } = string.Empty;
+    }
+}
