@@ -1,4 +1,4 @@
-using BibliotecaLiceista.Web.Components;
+﻿using BibliotecaLiceista.Web.Components;
 using BibliotecaLiceista.Web.Data;
 using BibliotecaLiceista.Web.Repositories;
 using Microsoft.AspNetCore.Authentication;
@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// MVC: controladores (equivalentes a los Servlets) y vistas Razor .cshtml (equivalentes a las JSP)
+builder.Services.AddControllersWithViews();
 
 // Autenticación por cookie y autorización por roles
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -24,6 +27,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddSingleton<ConexionBd>();
 builder.Services.AddScoped<LibroRepository>();
 builder.Services.AddScoped<UsuarioRepository>();
+builder.Services.AddScoped<EditorialRepository>();
+builder.Services.AddScoped<CategoriaRepository>();
 
 var app = builder.Build();
 
@@ -46,6 +51,7 @@ app.MapGet("/cerrar-sesion", async (HttpContext contexto) =>
 });
 
 app.MapStaticAssets();
+app.MapControllers();     // rutas de los controladores MVC ([Route] en cada controlador)
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
