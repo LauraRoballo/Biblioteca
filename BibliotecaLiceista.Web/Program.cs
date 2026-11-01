@@ -1,6 +1,8 @@
 ﻿using BibliotecaLiceista.Web.Components;
 using BibliotecaLiceista.Web.Data;
+using BibliotecaLiceista.Web.Models;
 using BibliotecaLiceista.Web.Repositories;
+using BibliotecaLiceista.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -29,6 +31,11 @@ builder.Services.AddScoped<LibroRepository>();
 builder.Services.AddScoped<UsuarioRepository>();
 builder.Services.AddScoped<EditorialRepository>();
 builder.Services.AddScoped<CategoriaRepository>();
+builder.Services.AddScoped<PrestamoRepository>();
+
+// Reglas de negocio de préstamos: valores leídos de appsettings.json (sección "PoliticasPrestamo")
+builder.Services.Configure<PoliticasPrestamo>(builder.Configuration.GetSection("PoliticasPrestamo"));
+builder.Services.AddScoped<PrestamoService>();
 
 var app = builder.Build();
 
