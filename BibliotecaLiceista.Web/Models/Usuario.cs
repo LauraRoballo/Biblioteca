@@ -9,5 +9,9 @@
         public string? Telefono { get; set; }
         public DateTime FechaRegistro { get; set; }
         public int IDTipoUsuario { get; set; }
+        public string Contrasenia { get; set; } = string.Empty;
+
+        // No es columna de la tabla Usuario: se llena con el JOIN a TipoUsuario
+        public string? NombreTipoUsuario { get; set; }
     }
 }
