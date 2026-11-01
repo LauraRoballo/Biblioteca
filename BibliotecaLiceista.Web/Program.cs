@@ -1,16 +1,29 @@
 using BibliotecaLiceista.Web.Components;
 using BibliotecaLiceista.Web.Data;
 using BibliotecaLiceista.Web.Repositories;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Componentes Razor con interactividad en el servidor
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Autenticación por cookie y autorización por roles
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opciones =>
+    {
+        opciones.LoginPath = "/login";
+        opciones.AccessDeniedPath = "/acceso-denegado";
+        opciones.ExpireTimeSpan = TimeSpan.FromHours(8);
+    });
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
 
 // Acceso a datos (ADO.NET)
 builder.Services.AddSingleton<ConexionBd>();
 builder.Services.AddScoped<LibroRepository>();
+builder.Services.AddScoped<UsuarioRepository>();
 
 var app = builder.Build();
 
@@ -21,7 +34,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();     // ← antes de UseAntiforgery
+app.UseAuthorization();
 app.UseAntiforgery();
+
+// Cerrar sesión: borra la cookie y vuelve al login
+app.MapGet("/cerrar-sesion", async (HttpContext contexto) =>
+{
+    await contexto.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    return Results.Redirect("/login");
+});
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()

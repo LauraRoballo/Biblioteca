@@ -1,3 +1,5 @@
+﻿@using Microsoft.AspNetCore.Http
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -30,11 +32,11 @@
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="@Assets["BibliotecaLiceista.Web.styles.css"]" />
 
-    <HeadOutlet />
+    <HeadOutlet @rendermode="ModoRenderizado" />
 </head>
 
 <body>
-    <Routes @rendermode="InteractiveServer" />
+    <Routes @rendermode="ModoRenderizado" />
 
     <div id="blazor-error-ui">
         Ha ocurrido un error inesperado.
@@ -52,3 +54,12 @@
 </body>
 
 </html>
+
+@code {
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+
+    // Las páginas marcadas con [ExcludeFromInteractiveRouting] (Login) se renderizan estáticas,
+    // porque necesitan el HttpContext para escribir la cookie de sesión.
+    private IComponentRenderMode? ModoRenderizado =>
+        HttpContext.AcceptsInteractiveRouting() ? InteractiveServer : null;
+}
