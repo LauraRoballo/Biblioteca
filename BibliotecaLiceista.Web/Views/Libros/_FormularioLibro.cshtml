@@ -1,0 +1,76 @@
+﻿@model Libro
+@* Vista parcial con los campos del libro. Se reutiliza en Crear y Editar
+   (equivale a <jsp:include page="formularioLibro.jsp" />). *@
+@{
+    var listaEditoriales = (ViewBag.ListaEditoriales as List<Editorial>) ?? new List<Editorial>();
+    var listaCategorias = (ViewBag.ListaCategorias as List<Categoria>) ?? new List<Categoria>();
+    var listaEstados = (ViewBag.ListaEstados as List<EstadoLibro>) ?? new List<EstadoLibro>();
+}
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<div class="row g-3">
+    <div class="col-md-8">
+        <label for="Titulo" class="form-label">Título *</label>
+        <input type="text" id="Titulo" name="Titulo" class="form-control" value="@Model.Titulo" maxlength="200" required />
+        @Html.ValidationMessage("Titulo", null, new { @class = "text-danger" })
+    </div>
+
+    <div class="col-md-4">
+        <label for="ISBN" class="form-label">ISBN</label>
+        <input type="text" id="ISBN" name="ISBN" class="form-control" value="@Model.ISBN" />
+    </div>
+
+    <div class="col-md-4">
+        <label for="IDEditorial" class="form-label">Editorial *</label>
+        <select id="IDEditorial" name="IDEditorial" class="form-select" required>
+            <option value="0">Seleccione...</option>
+            @foreach (var editorial in listaEditoriales)
+            {
+                <option value="@editorial.IDEditorial" selected="@(editorial.IDEditorial == Model.IDEditorial)">@editorial.NombreEditorial</option>
+            }
+        </select>
+        @Html.ValidationMessage("IDEditorial", null, new { @class = "text-danger" })
+    </div>
+
+    <div class="col-md-4">
+        <label for="IDCategoria" class="form-label">Categoría *</label>
+        <select id="IDCategoria" name="IDCategoria" class="form-select" required>
+            <option value="0">Seleccione...</option>
+            @foreach (var categoria in listaCategorias)
+            {
+                <option value="@categoria.IDCategoria" selected="@(categoria.IDCategoria == Model.IDCategoria)">@categoria.NombreCategoria</option>
+            }
+        </select>
+        @Html.ValidationMessage("IDCategoria", null, new { @class = "text-danger" })
+    </div>
+
+    <div class="col-md-4">
+        <label for="IDEstadoLibro" class="form-label">Estado *</label>
+        <select id="IDEstadoLibro" name="IDEstadoLibro" class="form-select" required>
+            <option value="0">Seleccione...</option>
+            @foreach (var estado in listaEstados)
+            {
+                <option value="@estado.IDEstadoLibro" selected="@(estado.IDEstadoLibro == Model.IDEstadoLibro)">@estado.NombreEstado</option>
+            }
+        </select>
+        @Html.ValidationMessage("IDEstadoLibro", null, new { @class = "text-danger" })
+    </div>
+
+    <div class="col-md-4">
+        <label for="Edicion" class="form-label">Edición</label>
+        <input type="text" id="Edicion" name="Edicion" class="form-control" value="@Model.Edicion" />
+    </div>
+
+    <div class="col-md-4">
+        <label for="AnioPublicacion" class="form-label">Año de publicación</label>
+        <input type="number" id="AnioPublicacion" name="AnioPublicacion" class="form-control"
+               value="@Model.AnioPublicacion" min="1000" max="2100" />
+        @Html.ValidationMessage("AnioPublicacion", null, new { @class = "text-danger" })
+    </div>
+
+    <div class="col-12">
+        <label for="Descripcion" class="form-label">Descripción</label>
+        <textarea id="Descripcion" name="Descripcion" class="form-control" rows="3">@Model.Descripcion</textarea>
+    </div>
+</div>
