@@ -1,4 +1,4 @@
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
 @* Layout del panel de Administrador. Sigue el mapa de navegación jerárquico:
    Dashboard, Gestión de Usuarios, Gestión de Libros, Préstamos, Devoluciones,
@@ -33,8 +33,10 @@
         <div class="panel-topbar">
             <span class="rol-pill"><i class="bi bi-shield-lock"></i> Administrador</span>
             <div class="panel-topbar-acciones">
-                <a href="panel"><i class="bi bi-arrow-left-right"></i> Cambiar de rol</a>
-                <a href="login"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+                <AuthorizeView>
+                    <span><i class="bi bi-person"></i> @context.User.Identity?.Name</span>
+                </AuthorizeView>
+                <a href="cerrar-sesion" data-enhance-nav="false"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
             </div>
         </div>
 
