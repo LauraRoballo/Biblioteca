@@ -1,4 +1,6 @@
-@page "/registro"
+﻿@page "/registro"
+@inject UsuarioRepository UsuarioRepository
+@inject NavigationManager Navegacion
 
 <PageTitle>Crear usuario</PageTitle>
 
@@ -7,7 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
 
-                <form class="formRegistro" action="login">
+                <EditForm Model="nuevoUsuario" OnValidSubmit="RegistrarAsync" class="formRegistro">
                     <div class="card cardRegistro shadow">
                         <div class="card-body">
 
@@ -20,58 +22,51 @@
                                 <!-- Nombre -->
                                 <div class="col-md-6">
                                     <label for="nombre" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese su nombre" required />
+                                    <InputText class="form-control" id="nombre" @bind-Value="nuevoUsuario.Nombre" placeholder="Ingrese su nombre" required />
                                 </div>
 
                                 <!-- Apellido -->
                                 <div class="col-md-6">
                                     <label for="apellido" class="form-label">Apellido</label>
-                                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingrese su apellido" required />
-                                </div>
-
-                                <!-- Documento -->
-                                <div class="col-md-6">
-                                    <label for="documento" class="form-label">Documento</label>
-                                    <input type="text" class="form-control" id="documento" name="documento" placeholder="Ingrese su documento" required />
+                                    <InputText class="form-control" id="apellido" @bind-Value="nuevoUsuario.Apellido" placeholder="Ingrese su apellido" required />
                                 </div>
 
                                 <!-- Teléfono -->
                                 <div class="col-md-6">
                                     <label for="telefono" class="form-label">Teléfono</label>
-                                    <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingrese su teléfono" required />
-                                </div>
-
-                                <!-- Fecha -->
-                                <div class="col-md-6">
-                                    <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required />
+                                    <InputText class="form-control" id="telefono" @bind-Value="nuevoUsuario.Telefono" placeholder="Ingrese su teléfono" />
                                 </div>
 
                                 <!-- Tipo -->
                                 <div class="col-md-6">
                                     <label for="tipoUsuario" class="form-label">Tipo de usuario</label>
-                                    <select class="form-select" id="tipoUsuario" name="tipoUsuario" required>
-                                        <option value="">Seleccione...</option>
-                                        <option value="alumno">Alumno</option>
-                                        <option value="docente">Docente</option>
-                                        <option value="bibliotecario">Bibliotecario</option>
-                                        <option value="administrador">Administrador</option>
-                                    </select>
+                                    <InputSelect class="form-select" id="tipoUsuario" @bind-Value="nuevoUsuario.IDTipoUsuario">
+                                        <option value="0">Seleccione...</option>
+                                        @foreach (var tipoUsuario in listaTiposUsuario)
+                                        {
+                                            <option value="@tipoUsuario.IDTipoUsuario">@tipoUsuario.NombreTipo</option>
+                                        }
+                                    </InputSelect>
                                 </div>
 
                                 <!-- Correo -->
                                 <div class="col-md-6">
                                     <label for="correoInstitucional" class="form-label">Correo institucional</label>
-                                    <input type="email" class="form-control" id="correoInstitucional" name="correoInstitucional" placeholder="Ingrese el correo institucional" required />
+                                    <InputText class="form-control" type="email" id="correoInstitucional" @bind-Value="nuevoUsuario.Correo" placeholder="Ingrese el correo institucional" required />
                                 </div>
 
                                 <!-- Contraseña -->
                                 <div class="col-md-6">
                                     <label for="contrasenia" class="form-label">Contraseña</label>
-                                    <input type="password" class="form-control" id="contrasenia" name="contrasenia" placeholder="Ingrese una contraseña" required />
+                                    <InputText class="form-control" type="password" id="contrasenia" @bind-Value="nuevoUsuario.Contrasenia" placeholder="Ingrese una contraseña" required />
                                 </div>
 
                             </div>
+
+                            @if (!string.IsNullOrEmpty(mensajeError))
+                            {
+                                <div class="alert alert-danger mt-3">@mensajeError</div>
+                            }
 
                             <div class="text-center mt-4">
                                 <button class="btn botonPrincipal" type="submit">
@@ -85,9 +80,40 @@
 
                         </div>
                     </div>
-                </form>
+                </EditForm>
 
             </div>
         </div>
     </div>
 </div>
+
+@code {
+    private Usuario nuevoUsuario = new();
+    private List<TipoUsuario> listaTiposUsuario = new();
+    private string? mensajeError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        listaTiposUsuario = await UsuarioRepository.ConsultarTiposUsuarioAsync();
+    }
+
+    private async Task RegistrarAsync()
+    {
+        mensajeError = null;
+
+        if (nuevoUsuario.IDTipoUsuario == 0)
+        {
+            mensajeError = "Seleccione el tipo de usuario.";
+            return;
+        }
+
+        if (await UsuarioRepository.ConsultarPorCorreoAsync(nuevoUsuario.Correo) is not null)
+        {
+            mensajeError = "Ya existe un usuario registrado con ese correo.";
+            return;
+        }
+
+        await UsuarioRepository.InsertarAsync(nuevoUsuario);
+        Navegacion.NavigateTo("login", forceLoad: true);
+    }
+}
