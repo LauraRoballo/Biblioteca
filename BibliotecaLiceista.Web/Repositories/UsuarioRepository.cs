@@ -74,6 +74,20 @@ namespace BibliotecaLiceista.Web.Repositories
             return await lector.ReadAsync() ? MapearUsuario(lector) : null;
         }
 
+        // ---------- CONSULTAR POR ID (validaciones del módulo de préstamos) ----------
+        /// <summary>Consulta un usuario por su identificador, con el nombre de su rol.</summary>
+        public async Task<Usuario?> ConsultarPorIdAsync(int idUsuario)
+        {
+            string sql = ConsultaBase + " WHERE u.IDUsuario = @IDUsuario";
+
+            using var conexion = _conexionBd.CrearConexion();
+            using var comando = new SqlCommand(sql, conexion);
+            comando.Parameters.AddWithValue("@IDUsuario", idUsuario);
+            await conexion.OpenAsync();
+            using var lector = await comando.ExecuteReaderAsync();
+            return await lector.ReadAsync() ? MapearUsuario(lector) : null;
+        }
+
         // ---------- ACTUALIZAR (no cambia la contraseña) ----------
         public async Task<bool> ActualizarAsync(Usuario usuario)
         {
