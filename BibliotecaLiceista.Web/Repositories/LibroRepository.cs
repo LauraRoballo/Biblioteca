@@ -8,8 +8,14 @@ namespace BibliotecaLiceista.Web.Repositories
     {
         private readonly ConexionBd _conexionBd;
 
-        private const string ColumnasLibro =
-            "IDLibro, Titulo, ISBN, Edicion, AnioPublicacion, Descripcion, IDEditorial, IDCategoria, IDEstadoLibro";
+        private const string ConsultaBase = @"
+            SELECT l.IDLibro, l.Titulo, l.ISBN, l.Edicion, l.AnioPublicacion, l.Descripcion,
+                   l.IDEditorial, l.IDCategoria, l.IDEstadoLibro,
+                   e.NombreEditorial, c.NombreCategoria, el.NombreEstado
+            FROM Libro l
+            INNER JOIN Editorial e ON e.IDEditorial = l.IDEditorial
+            INNER JOIN Categoria c ON c.IDCategoria = l.IDCategoria
+            INNER JOIN EstadoLibro el ON el.IDEstadoLibro = l.IDEstadoLibro";
 
         public LibroRepository(ConexionBd conexionBd)
         {
@@ -35,25 +41,28 @@ namespace BibliotecaLiceista.Web.Repositories
         // ---------- CONSULTAR TODOS ----------
         public async Task<List<Libro>> ConsultarTodosAsync()
         {
-            string sql = $"SELECT {ColumnasLibro} FROM Libro ORDER BY Titulo";
-            var listaLibros = new List<Libro>();
+            string sql = ConsultaBase + " ORDER BY l.Titulo";
 
             using var conexion = _conexionBd.CrearConexion();
             using var comando = new SqlCommand(sql, conexion);
+            return await LeerListaAsync(conexion, comando);
+        }
 
-            await conexion.OpenAsync();
-            using var lector = await comando.ExecuteReaderAsync();
-            while (await lector.ReadAsync())
-            {
-                listaLibros.Add(MapearLibro(lector));
-            }
-            return listaLibros;
+        // ---------- CONSULTAR POR TÍTULO O ISBN (búsqueda) ----------
+        public async Task<List<Libro>> ConsultarPorTituloAsync(string textoBusqueda)
+        {
+            string sql = ConsultaBase + " WHERE l.Titulo LIKE @Texto OR l.ISBN LIKE @Texto ORDER BY l.Titulo";
+
+            using var conexion = _conexionBd.CrearConexion();
+            using var comando = new SqlCommand(sql, conexion);
+            comando.Parameters.AddWithValue("@Texto", $"%{textoBusqueda}%");
+            return await LeerListaAsync(conexion, comando);
         }
 
         // ---------- CONSULTAR POR ID ----------
         public async Task<Libro?> ConsultarPorIdAsync(int idLibro)
         {
-            string sql = $"SELECT {ColumnasLibro} FROM Libro WHERE IDLibro = @IDLibro";
+            string sql = ConsultaBase + " WHERE l.IDLibro = @IDLibro";
 
             using var conexion = _conexionBd.CrearConexion();
             using var comando = new SqlCommand(sql, conexion);
@@ -96,7 +105,41 @@ namespace BibliotecaLiceista.Web.Repositories
             return await comando.ExecuteNonQueryAsync() > 0;
         }
 
+        // ---------- ESTADOS DEL LIBRO (lista desplegable) ----------
+        public async Task<List<EstadoLibro>> ConsultarEstadosLibroAsync()
+        {
+            const string sql = "SELECT IDEstadoLibro, NombreEstado, Descripcion FROM EstadoLibro ORDER BY NombreEstado";
+            var listaEstados = new List<EstadoLibro>();
+
+            using var conexion = _conexionBd.CrearConexion();
+            using var comando = new SqlCommand(sql, conexion);
+            await conexion.OpenAsync();
+            using var lector = await comando.ExecuteReaderAsync();
+            while (await lector.ReadAsync())
+            {
+                listaEstados.Add(new EstadoLibro
+                {
+                    IDEstadoLibro = lector.GetInt32(0),
+                    NombreEstado = lector.GetString(1),
+                    Descripcion = lector.IsDBNull(2) ? null : lector.GetString(2)
+                });
+            }
+            return listaEstados;
+        }
+
         // ---------- MÉTODOS PRIVADOS DE APOYO ----------
+        private static async Task<List<Libro>> LeerListaAsync(SqlConnection conexion, SqlCommand comando)
+        {
+            var listaLibros = new List<Libro>();
+            await conexion.OpenAsync();
+            using var lector = await comando.ExecuteReaderAsync();
+            while (await lector.ReadAsync())
+            {
+                listaLibros.Add(MapearLibro(lector));
+            }
+            return listaLibros;
+        }
+
         private static void AgregarParametros(SqlCommand comando, Libro libro)
         {
             comando.Parameters.AddWithValue("@Titulo", libro.Titulo);
@@ -117,11 +160,14 @@ namespace BibliotecaLiceista.Web.Repositories
                 Titulo = lector.GetString(1),
                 ISBN = lector.IsDBNull(2) ? null : lector.GetString(2),
                 Edicion = lector.IsDBNull(3) ? null : lector.GetString(3),
-                AnioPublicacion = lector.IsDBNull(4) ? null : lector.GetInt32(4),
+                AnioPublicacion = lector.IsDBNull(4) ? null : Convert.ToInt32(lector.GetValue(4)),
                 Descripcion = lector.IsDBNull(5) ? null : lector.GetString(5),
                 IDEditorial = lector.GetInt32(6),
                 IDCategoria = lector.GetInt32(7),
-                IDEstadoLibro = lector.GetInt32(8)
+                IDEstadoLibro = lector.GetInt32(8),
+                NombreEditorial = lector.GetString(9),
+                NombreCategoria = lector.GetString(10),
+                NombreEstadoLibro = lector.GetString(11)
             };
         }
     }
